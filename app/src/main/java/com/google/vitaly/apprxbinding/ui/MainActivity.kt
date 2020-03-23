@@ -9,24 +9,28 @@ import com.google.vitaly.apprxbinding.mvp.view.IMainActitityView
 import com.jakewharton.rxbinding3.InitialValueObservable
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity(), IMainActitityView {
 
-  //  val preseter=MainActitvityPresenter(this)
-    //val changeText: Observable<CharSequence>?=null
+    val preseter: MainActitvityPresenter by lazy{
+        createMainActitvityPresenter()
+    }
+    var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-       val preseter=MainActitvityPresenter(this)
-        getTextFromEt(preseter)
+
     }
 
-    private fun getTextFromEt(preseter: MainActitvityPresenter) {
-        et_enterText
+    private fun createMainActitvityPresenter() = MainActitvityPresenter(this)
+
+    private fun getTextFromEt(preseter: MainActitvityPresenter): Disposable? {
+        return et_enterText
             .textChanges()
             .map {
                 it.toString()
@@ -39,6 +43,11 @@ class MainActivity : AppCompatActivity(), IMainActitityView {
             })
     }
 
+    override fun onStart() {
+        super.onStart()
+        disposable=getTextFromEt(preseter)
+    }
+
     override fun updateTextView(string: String?) {
         string?.let {
             if(!it.equals("Error")){
@@ -47,5 +56,14 @@ class MainActivity : AppCompatActivity(), IMainActitityView {
                 tv_outText.setTextColor(Color.RED)
             tv_outText.text=it}
             }
+    }
+
+    override fun onStop() {
+        preseter.dispose()
+        super.onStop()
+    }
+    override fun  dispose(){
+        disposable?.let {it.dispose()  }
+
     }
 }
