@@ -6,12 +6,9 @@ import android.os.Bundle
 import com.google.vitaly.apprxbinding.R
 import com.google.vitaly.apprxbinding.mvp.presenter.MainActitvityPresenter
 import com.google.vitaly.apprxbinding.mvp.view.IMainActitityView
-import com.jakewharton.rxbinding3.InitialValueObservable
 import com.jakewharton.rxbinding3.widget.textChanges
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity(), IMainActitityView {
@@ -64,6 +61,5 @@ class MainActivity : AppCompatActivity(), IMainActitityView {
     }
     override fun  dispose(){
         disposable?.let {it.dispose()  }
-
     }
 }

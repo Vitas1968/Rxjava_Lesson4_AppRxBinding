@@ -11,6 +11,5 @@ class MainActitvityPresenter(val view:IMainActitityView?) {
 
     fun dispose(){
         view?.let { it.dispose() }
-
     }
 }
